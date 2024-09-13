@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Books</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f2f5;
+        }
+        header {
+            background-color: #4a90e2;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin-left: 20px;
+            font-weight: bold;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        main {
+            padding: 40px 20px;
+        }
+        #books-list {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 15px;
+            border: 1px solid #e0e0e0;
+            text-align: left;
+            color: #333;
+        }
+        th {
+            background-color: #f9fafc;
+            color: #4a90e2;
+            font-size: 1.1em;
+            text-transform: uppercase;
+        }
+        tr:nth-child(even) {
+            background-color: #f7f8fa;
+        }
+        tr:nth-child(odd) {
+            background-color: #ffffff;
+        }
+        tr:hover {
+            background-color: #eaf3fc;
+        }
+        td {
+            font-size: 1em;
+        }
+        td:nth-child(3) {
+            font-weight: bold;
+        }
+        td:nth-child(3).Available {
+            color: #28a745;
+        }
+        td:nth-child(3).Borrowed {
+            color: #e74c3c;
+        }
+        td:nth-child(4) {
+            font-style: italic;
+            color: #555;
+        }
+        #add-book-form {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        #add-book-form h2 {
+            margin-bottom: 20px;
+            color: #4a90e2;
+            text-align: center;
+        }
+        #add-book-form input, #add-book-form select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        #add-book-form button {
+            width: 100%;
+            padding: 12px;
+            background-color: #4a90e2;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #add-book-form button:hover {
+            background-color: #357ab8;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Available Books</h1>
+    </header>
+    <main>
+        <div id="books-list">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>Status</th>
+                        <th>Borrowed Date</th>
+                    </tr>
+                </thead>
+                <tbody id="book-table-body">
+                    <tr>
+                        <td>The Great Gatsby</td>
+                        <td>F. Scott Fitzgerald</td>
+                        <td class="Available">Available</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>To Kill a Mockingbird</td>
+                        <td>Harper Lee</td>
+                        <td class="Borrowed">Borrowed</td>
+                        <td>2024-09-01</td>
+                    </tr>
+                    <tr>
+                        <td>1984</td>
+                        <td>George Orwell</td>
+                        <td class="Available">Available</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>The Catcher in the Rye</td>
+                        <td>J.D. Salinger</td>
+                        <td class="Borrowed">Borrowed</td>
+                        <td>2024-08-20</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="add-book-form">
+            <h2>Add a New Book</h2>
+            <form id="book-form">
+                <input type="text" id="book-title" placeholder="Book Title" required>
+                <input type="text" id="book-author" placeholder="Author" required>
+                <select id="book-status" required>
+                    <option value="Available">Available</option>
+                    <option value="Borrowed">Borrowed</option>
+                </select>
+                <input type="date" id="borrow-date" placeholder="Borrow Date" disabled>
+                <button type="submit">Add Book</button>
+            </form>
+        </div>
+    </main>
+    <script>
+        const bookStatus = document.getElementById('book-status');
+        const borrowDateInput = document.getElementById('borrow-date');
+        bookStatus.addEventListener('change', function() {
+            if (bookStatus.value === 'Borrowed') {
+                borrowDateInput.disabled = false;
+                borrowDateInput.required = true;
+            } else {
+                borrowDateInput.disabled = true;
+                borrowDateInput.required = false;
+            }
+        });
+        document.getElementById('book-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const title = document.getElementById('book-title').value;
+            const author = document.getElementById('book-author').value;
+            const status = document.getElementById('book-status').value;
+            const borrowDate = document.getElementById('borrow-date').value;
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td>${title}</td>
+                <td>${author}</td>
+                <td class="${status}">${status}</td>
+                <td>${status === 'Borrowed' ? borrowDate : ''}</td>
+            `;
+            document.getElementById('book-table-body').appendChild(newRow);
+            document.getElementById('book-form').reset();
+            borrowDateInput.disabled = true;  
+        });
+    </script>
+    <nav>
+        <a href="/logout">Logout</a>
+    </nav>
+</body>
+</html>
